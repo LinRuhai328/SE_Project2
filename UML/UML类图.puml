@@ -1,0 +1,74 @@
+@startuml UML类图
+' 初版：由模型直接生成，未经人工修改
+skinparam defaultFontName "Microsoft YaHei"
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+
+title 多人共享记账系统 类图
+
+class User {
+  - userId : String
+  - nickname : String
+  - email : String
+  + register() : void
+  + login(password) : Session
+}
+
+class Ledger {
+  - ledgerId : String
+  - name : String
+  - type : String
+  - members : List<User>
+  - ownerRole : String
+  - adminRole : String
+  + addMember(user : User) : void
+  + removeMember(user : User) : void
+}
+
+class TransactionRecord {
+  - recordId : String
+  - amount : double
+  - direction : String
+  - occurredOn : Date
+  - state : String
+  - remark : String
+  + save() : void
+  + update(amount : double) : void
+  + approve() : void
+  + reject() : void
+}
+
+class Category {
+  - categoryId : String
+  - name : String
+}
+
+class Budget {
+  - budgetId : String
+  - amount : double
+  + check(expense : double) : boolean
+}
+
+class Settlement {
+  - settlementId : String
+  - period : String
+  - totalExpense : double
+  - totalIncome : double
+  + calculate(ledger : Ledger) : void
+  + lock() : void
+}
+
+class AuditLog {
+  - logId : String
+  - action : String
+  - occurredAt : DateTime
+}
+
+User "1" -- "0..*" Ledger : 参与
+Ledger "1" -- "0..*" TransactionRecord : 包含
+TransactionRecord "1" -- "1" Category
+Ledger "1" -- "0..*" Budget
+Ledger "1" -- "0..*" Settlement
+Ledger "1" -- "0..*" AuditLog
+
+@enduml
