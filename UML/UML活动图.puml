@@ -1,0 +1,28 @@
+@startuml UML活动图
+' 初版：由模型直接生成，未经人工修改
+skinparam defaultFontName "Microsoft YaHei"
+skinparam shadowing false
+
+title 收支记录流程 活动图
+
+start
+:成员 新增记录;
+:填写金额、日期、类别;
+:提交;
+if (共享账本？) then (是)
+  :进入待审核;
+  :管理员审核;
+  if (通过？) then (是)
+    :计入统计;
+  else (否)
+    :退回修改;
+    :成员 直接修改金额;
+    :重新提交;
+  endif
+else (否)
+  :直接生效;
+endif
+:按月结算;
+stop
+
+@enduml
